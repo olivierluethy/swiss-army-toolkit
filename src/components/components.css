@@ -1,198 +1,281 @@
 /* ============================================================
-   KNIFE — the handle and the fold-out blade selector
+   KNIFE — a Victorinox-style pocket knife with fold-out blades
    ============================================================ */
 .knife {
+  --blade-w: 96px; /* mobile default; widened per breakpoint below */
   position: relative;
-  margin: 8px auto 30px;
+  margin: 4px auto 34px;
   max-width: 940px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (min-width: 560px) {
+  .knife { --blade-w: 92px; }
+}
+@media (min-width: 900px) {
+  .knife { --blade-w: 76px; }
 }
 
-/* The red handle body */
+/* ---------- The fanned blades above the handle ---------- */
+.knife__fan {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: -22px; /* tuck the blade hinges under the handle's top edge */
+  padding: 0 30px;
+}
+.fan-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* ---------- A single steel blade / tool ---------- */
+.blade {
+  position: relative;
+  width: var(--blade-w);
+  height: calc(var(--blade-w) * 1.62);
+  transform-origin: 50% 100%; /* hinge at the bottom, on the handle edge */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 7px 26px;
+  filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.34));
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+}
+/* the steel body, cut to a blade silhouette (spear tip at the top) */
+.blade__steel {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0%, 92% 20%, 100% 30%, 100% 100%, 0% 100%, 0% 30%, 8% 20%);
+  background: linear-gradient(
+    100deg,
+    var(--steel-2) 0%,
+    var(--steel-1) 28%,
+    var(--steel-2) 52%,
+    var(--steel-3) 100%
+  );
+}
+.blade__edge {
+  position: absolute;
+  top: 6%;
+  bottom: 8%;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.15) 40%,
+    rgba(255, 255, 255, 0.5)
+  );
+  opacity: 0.5;
+}
+.blade__rivet {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 35% 30%, #fff, #c2c9cf 45%, #7c848b);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.blade__icon {
+  position: relative;
+  z-index: 1;
+  margin-top: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #2b333c;
+  background: linear-gradient(180deg, #ffffff, #e4e9ee);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s, color 0.2s;
+}
+.blade__label {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  margin-bottom: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-align: center;
+  line-height: 1.12;
+  color: #38414b;
+  max-width: 100%;
+}
+.blade:focus-visible {
+  outline: none;
+}
+.blade:focus-visible .blade__steel {
+  box-shadow: inset 0 0 0 2.5px var(--blade-accent, var(--accent));
+}
+/* open state — blade is deployed and glows in its accent colour */
+.blade.is-open {
+  filter: drop-shadow(0 6px 10px color-mix(in srgb, var(--blade-accent, var(--accent)) 55%, rgba(0, 0, 0, 0.4)));
+}
+.blade.is-open .blade__steel {
+  background: linear-gradient(100deg, #ffffff 0%, #f0f3f6 60%, #dfe4e9 100%);
+}
+.blade.is-open .blade__icon {
+  background: var(--blade-accent, var(--accent));
+  color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--blade-accent, var(--accent)) 30%, transparent);
+}
+.blade.is-open .blade__label {
+  color: color-mix(in srgb, var(--blade-accent, var(--accent)) 70%, #2b333c);
+}
+
+/* ---------- The red handle (the hero) ---------- */
 .handle {
   position: relative;
-  border-radius: 26px;
-  padding: 20px 22px 22px;
+  z-index: 2;
+  height: clamp(88px, 14vw, 108px);
+  border-radius: 54px;
+  padding: 0 66px;
+  display: flex;
+  align-items: center;
   background: linear-gradient(
     180deg,
     var(--red-bright) 0%,
-    var(--red) 42%,
+    var(--red) 40%,
     var(--red-dark) 100%
   );
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -3px 8px rgba(0, 0, 0, 0.35),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.15),
+    inset 0 2px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -4px 10px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.18),
     var(--shadow-3);
   overflow: hidden;
 }
-/* subtle glossy sheen sweeping across the handle */
+/* glossy sheen sweeping across the scale */
 .handle::before {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.16) 0%,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0) 70%,
-    rgba(255, 255, 255, 0.08) 100%
+    118deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0) 26%,
+    rgba(255, 255, 255, 0) 72%,
+    rgba(255, 255, 255, 0.1) 100%
   );
   pointer-events: none;
 }
-/* the classic side rivets */
-.handle::after {
-  content: "";
+/* steel end bolsters */
+.bolster {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 52px;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    var(--steel-1) 0%,
+    var(--steel-2) 40%,
+    var(--steel-4) 100%
+  );
+  box-shadow: inset 0 1px 0 var(--steel-edge), inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+}
+.bolster--left {
+  left: 0;
+  border-radius: 54px 8px 8px 54px;
+  border-right: 1px solid rgba(0, 0, 0, 0.22);
+}
+.bolster--right {
+  right: 0;
+  border-radius: 8px 54px 54px 8px;
+  border-left: 1px solid rgba(0, 0, 0, 0.22);
+}
+/* rivets set into the bolsters */
+.rivet {
   position: absolute;
   top: 50%;
-  right: 14px;
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
+  z-index: 2;
   transform: translateY(-50%);
-  background: radial-gradient(circle at 35% 30%, #fff 0%, #cdd3d8 40%, #7c848b 100%);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.25),
-    0 -170px 0 rgba(255, 255, 255, 0) ,
-    14px 0 0 -1px transparent;
+  background: radial-gradient(circle at 35% 30%, #fff 0%, #c9d0d6 45%, #6f777e 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.28), 0 1px 1px rgba(255, 255, 255, 0.4);
 }
+.rivet--1 { left: 20px; }
+.rivet--2 { right: 20px; }
 
-.handle__brand {
+.handle__inner {
+  position: relative;
+  z-index: 3;
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 1;
+  gap: 13px;
+  width: 100%;
 }
 .emblem {
-  width: 40px;
-  height: 40px;
-  border-radius: 9px;
-  background: #fff;
+  flex: none;
   display: grid;
   place-items: center;
-  flex: none;
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.06),
-    0 3px 8px rgba(0, 0, 0, 0.25);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
-.emblem svg {
-  color: var(--red);
+.shield {
+  display: block;
 }
 .handle__title {
   color: #fff;
-  line-height: 1.05;
+  line-height: 1.08;
+  min-width: 0;
 }
 .handle__title b {
   display: block;
-  font-size: 19px;
+  font-size: clamp(16px, 3.6vw, 20px);
   font-weight: 800;
   letter-spacing: -0.01em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 .handle__title span {
   display: block;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .handle__count {
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(0, 0, 0, 0.18);
-  padding: 6px 11px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.24);
+  padding: 7px 12px;
   border-radius: 20px;
   white-space: nowrap;
+  transition: background 0.15s;
+}
+button.handle__count:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+.handle__count--static {
+  background: rgba(255, 255, 255, 0.18);
 }
 
-/* Blade tray */
-.blades {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  gap: 10px;
-}
-
-/* ---------- A single folded blade / tool tab ---------- */
-.blade {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-  padding: 13px 8px 11px;
-  border-radius: 13px;
-  background: linear-gradient(
-    180deg,
-    var(--steel-1) 0%,
-    var(--steel-2) 55%,
-    var(--steel-3) 100%
-  );
-  box-shadow:
-    inset 0 1px 0 var(--steel-edge),
-    inset 0 -2px 3px rgba(0, 0, 0, 0.18),
-    0 3px 6px rgba(0, 0, 0, 0.28);
-  color: #2b333c;
-  transition:
-    transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.16s ease,
-    filter 0.16s ease;
-  will-change: transform;
-  -webkit-tap-highlight-color: transparent;
-}
-.blade__icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 9px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.55);
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-.blade__label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-align: center;
-  line-height: 1.15;
-  color: #333c45;
-}
-.blade:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    inset 0 1px 0 var(--steel-edge),
-    0 8px 16px rgba(0, 0, 0, 0.34);
-  filter: brightness(1.03);
-}
-.blade:active {
-  transform: translateY(-1px) scale(0.98);
-}
-.blade:focus-visible {
-  outline: 3px solid rgba(255, 255, 255, 0.85);
-  outline-offset: 2px;
-}
-/* open state — blade is "pulled out", glowing accent nick */
-.blade.is-open {
-  background: linear-gradient(180deg, #ffffff 0%, #eef1f4 100%);
-  box-shadow:
-    inset 0 0 0 2px var(--blade-accent, var(--accent)),
-    0 6px 16px rgba(0, 0, 0, 0.3);
-}
-.blade.is-open .blade__icon {
-  background: var(--blade-accent, var(--accent));
-  color: #fff;
-}
-.blade__nick {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--blade-accent, var(--accent));
-  box-shadow: 0 0 8px var(--blade-accent, var(--accent));
+@media (max-width: 559px) {
+  .knife__fan { padding: 0 8px; gap: 6px; }
+  .fan-row { gap: 4px; }
+  .handle { padding: 0 56px; border-radius: 46px; }
+  .handle__title span { display: none; }
 }
 
 /* ============================================================

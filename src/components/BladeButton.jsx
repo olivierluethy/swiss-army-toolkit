@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
 
 /**
- * A single folded blade in the handle. Hovering lets it "peek" out of the
- * handle; clicking swings it (a quick pivot) and toggles the tool open.
+ * A single tool rendered as a steel blade that pivots from the handle edge.
+ * At rest it sits at its fanned `tilt` angle; on hover it swings up out of the
+ * fan, and when open it deploys fully with its accent colour.
  */
-export default function BladeButton({ tool, isOpen, onToggle }) {
+export default function BladeButton({ tool, tilt, isOpen, onToggle }) {
   const Icon = tool.icon
   return (
     <motion.button
@@ -15,14 +16,21 @@ export default function BladeButton({ tool, isOpen, onToggle }) {
       aria-pressed={isOpen}
       title={isOpen ? `Fold in ${tool.name}` : `Fold out ${tool.name}`}
       initial={false}
-      whileHover={{ y: -4, rotate: -3 }}
-      whileTap={{ scale: 0.95, rotate: 4 }}
-      transition={{ type: 'spring', stiffness: 500, damping: 22 }}
-      layout
+      animate={{
+        rotate: isOpen ? tilt * 0.35 : tilt,
+        y: isOpen ? -16 : 0,
+        scale: isOpen ? 1.05 : 1,
+      }}
+      whileHover={{ rotate: tilt * 0.5, y: isOpen ? -20 : -12, scale: isOpen ? 1.08 : 1.05 }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ type: 'spring', stiffness: 320, damping: 20 }}
     >
-      {isOpen && <span className="blade__nick" />}
+      <span className="blade__steel" aria-hidden="true">
+        <span className="blade__edge" />
+        <span className="blade__rivet" />
+      </span>
       <span className="blade__icon">
-        <Icon size={20} strokeWidth={2.1} />
+        <Icon size={19} strokeWidth={2.1} />
       </span>
       <span className="blade__label">{tool.short}</span>
     </motion.button>
