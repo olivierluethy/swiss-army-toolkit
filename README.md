@@ -47,7 +47,13 @@ npm run build
 ```
 
 Then just **open `dist/index.html`** — double-click it, or drag it into your
-browser. No server needed.
+browser. No server needed. It's a single self-contained file (JS, CSS and icon
+all inlined), so you can move or copy it anywhere and it still works.
+
+> ⚠️ Open **`dist/index.html`**, not the `index.html` in the project root. The
+> root file is Vite's dev entry — it references `./src/main.jsx`, which the
+> browser blocks over `file://` (a CORS error). Only the built `dist` file is
+> meant to be opened directly.
 
 > The build is bundled into a **single self-contained `index.html`** (via
 > `vite-plugin-singlefile`) with `base: './'`. This sidesteps the browser
