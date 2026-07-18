@@ -1,9 +1,8 @@
 import { X } from 'lucide-react'
 import BladeButton from './BladeButton.jsx'
-import { useMediaQuery } from '../hooks/useMediaQuery.js'
 
 /* The Victorinox-style cross-and-shield emblem */
-function Shield({ size = 34 }) {
+function Shield({ size = 32 }) {
   return (
     <svg width={size} height={size * 1.18} viewBox="0 0 40 48" aria-hidden="true" className="shield">
       <path d="M20 1.5 L37 7.5 V25 C37 38 28.5 44 20 46.5 C11.5 44 3 38 3 25 V7.5 Z" fill="#ffffff" />
@@ -13,71 +12,59 @@ function Shield({ size = 34 }) {
   )
 }
 
-const MAX_TILT = 15 // degrees at the ends of each fanned row
+const MAX_TILT = 9 // degrees at the ends of each vertical fan
 
-function chunk(arr, size) {
-  const out = []
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
-  return out
+function tiltFor(i, n) {
+  const center = (n - 1) / 2
+  return center === 0 ? 0 : ((i - center) / center) * MAX_TILT
 }
 
-export default function Knife({ tools, openIds, onToggle, onCloseAll }) {
-  const openSet = new Set(openIds)
-  const n = tools.length
-
-  // How many blades fan out per row, so each row is a tidy symmetric fan.
-  const wide = useMediaQuery('(min-width: 900px)')
-  const medium = useMediaQuery('(min-width: 560px)')
-  const perRow = wide ? 8 : medium ? 5 : 3
-  const rows = chunk(tools, perRow)
-
+export default function Knife({ leftTools, rightTools, openSet, onToggle, onCloseAll, openCount, total }) {
   return (
-    <div className="knife">
-      {/* The blades fan out from the top edge of the handle */}
-      <div className="knife__fan">
-        {rows.map((row, ri) => {
-          const center = (row.length - 1) / 2
-          return (
-            <div className="fan-row" key={ri}>
-              {row.map((tool) => {
-                const pos = row.indexOf(tool)
-                const tilt = center === 0 ? 0 : ((pos - center) / center) * MAX_TILT
-                return (
-                  <BladeButton
-                    key={tool.id}
-                    tool={tool}
-                    tilt={tilt}
-                    isOpen={openSet.has(tool.id)}
-                    onToggle={onToggle}
-                  />
-                )
-              })}
-            </div>
-          )
-        })}
+    <div className="knife--v">
+      <div className="rail rail--left">
+        {leftTools.map((tool, i) => (
+          <BladeButton
+            key={tool.id}
+            tool={tool}
+            side="left"
+            tilt={tiltFor(i, leftTools.length)}
+            isOpen={openSet.has(tool.id)}
+            onToggle={onToggle}
+          />
+        ))}
       </div>
 
-      {/* The red handle — the hero of the page */}
-      <div className="handle">
-        <span className="bolster bolster--left" aria-hidden="true" />
-        <span className="bolster bolster--right" aria-hidden="true" />
+      <div className="handle handle--v">
+        <span className="bolster bolster--top" aria-hidden="true" />
+        <span className="bolster bolster--bottom" aria-hidden="true" />
         <span className="rivet rivet--1" aria-hidden="true" />
         <span className="rivet rivet--2" aria-hidden="true" />
 
-        <div className="handle__inner">
+        <div className="handle__inner--v">
           <span className="emblem"><Shield /></span>
-          <span className="handle__title">
-            <b>Swiss Army Toolkit</b>
-            <span>Everyday tools, folded into one</span>
-          </span>
-          {openIds.length > 0 ? (
+          <span className="handle__title--v">Swiss Army Toolkit</span>
+          {openCount > 0 ? (
             <button className="handle__count" onClick={onCloseAll} title="Fold all tools in">
-              {openIds.length} open <X size={13} />
+              {openCount}<X size={12} />
             </button>
           ) : (
-            <span className="handle__count handle__count--static">{n} tools</span>
+            <span className="handle__count handle__count--static">{total}</span>
           )}
         </div>
+      </div>
+
+      <div className="rail rail--right">
+        {rightTools.map((tool, i) => (
+          <BladeButton
+            key={tool.id}
+            tool={tool}
+            side="right"
+            tilt={tiltFor(i, rightTools.length)}
+            isOpen={openSet.has(tool.id)}
+            onToggle={onToggle}
+          />
+        ))}
       </div>
     </div>
   )

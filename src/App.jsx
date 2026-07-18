@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Wrench } from 'lucide-react'
-import { TOOLS, TOOL_MAP } from './data/tools.js'
+import { LEFT_TOOLS, RIGHT_TOOLS, SIDE, TOOL_MAP } from './data/tools.js'
 import { useLocalStorage } from './hooks/useLocalStorage.js'
 import Knife from './components/Knife.jsx'
 import ToolPanel from './components/ToolPanel.jsx'
@@ -11,6 +11,9 @@ export default function App() {
   const [open, setOpen] = useLocalStorage('sak:open', [])
 
   const valid = open.filter((id) => TOOL_MAP[id])
+  const openSet = new Set(valid)
+  const leftOpen = valid.filter((id) => SIDE[id] === 'left')
+  const rightOpen = valid.filter((id) => SIDE[id] === 'right')
 
   const toggle = useCallback(
     (id) => {
@@ -24,30 +27,43 @@ export default function App() {
     [setOpen],
   )
 
+  const renderPanels = (ids, side) => (
+    <AnimatePresence mode="popLayout">
+      {ids.map((id) => (
+        <ToolPanel key={id} tool={TOOL_MAP[id]} side={side} onClose={() => close(id)} />
+      ))}
+    </AnimatePresence>
+  )
+
   return (
     <div className="app">
       <div className="app__inner">
-        <Knife tools={TOOLS} openIds={valid} onToggle={toggle} onCloseAll={() => setOpen([])} />
+        <div className="stage">
+          <div className="side side--left">{renderPanels(leftOpen, 'left')}</div>
 
-        {valid.length === 0 ? (
+          <Knife
+            leftTools={LEFT_TOOLS}
+            rightTools={RIGHT_TOOLS}
+            openSet={openSet}
+            onToggle={toggle}
+            onCloseAll={() => setOpen([])}
+            openCount={valid.length}
+            total={LEFT_TOOLS.length + RIGHT_TOOLS.length}
+          />
+
+          <div className="side side--right">{renderPanels(rightOpen, 'right')}</div>
+        </div>
+
+        {valid.length === 0 && (
           <div className="empty">
             <div className="empty__ring">
               <Wrench size={30} />
             </div>
             <h2>Pick a blade to begin</h2>
             <p>
-              Tap any tool above and watch it fold out. Open as many as you like —
-              they all keep working side by side.
+              Tap any blade to fold out its tool. Left-hand blades open to the left,
+              right-hand blades to the right — open as many as you like.
             </p>
-          </div>
-        ) : (
-          <div className="workspace">
-            <AnimatePresence mode="popLayout">
-              {valid.map((id) => {
-                const tool = TOOL_MAP[id]
-                return <ToolPanel key={id} tool={tool} onClose={() => close(id)} />
-              })}
-            </AnimatePresence>
           </div>
         )}
       </div>

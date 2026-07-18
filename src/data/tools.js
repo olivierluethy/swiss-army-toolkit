@@ -55,3 +55,12 @@ export const TOOLS = [
 ]
 
 export const TOOL_MAP = Object.fromEntries(TOOLS.map((t) => [t.id, t]))
+
+// Blades fold out of both long sides of the handle: the first 8 on the left,
+// the last 7 on the right — like a real Swiss Army knife.
+const SPLIT = 8
+export const LEFT_TOOLS = TOOLS.slice(0, SPLIT)
+export const RIGHT_TOOLS = TOOLS.slice(SPLIT)
+export const SIDE = Object.fromEntries(
+  TOOLS.map((t, i) => [t.id, i < SPLIT ? 'left' : 'right']),
+)
