@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Segmented, Field } from '../components/ui.jsx'
+import { formatDate } from '../utils/formatDate.js'
 
 const DAY = 86400000
 function isoToday() {
@@ -71,8 +72,8 @@ function AddSubtract() {
         </label>
       </div>
       <div className="cur__result">
-        <div className="cur__result-amt stat" style={{ fontSize: 22 }}>
-          {result ? result.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }) : '—'}
+        <div className="cur__result-amt stat" style={{ fontSize: 21 }}>
+          {result ? formatDate(result) : '—'}
         </div>
       </div>
     </>
@@ -110,7 +111,12 @@ function Countdown() {
           ))}
         </div>
       ) : <p className="tool__note">Pick a date to start the countdown.</p>}
-      {diff != null && <p className="tool__note">{past ? 'That moment has passed.' : 'Counting down…'}</p>}
+      {t != null && !isNaN(t) && (
+        <p className="tool__note">
+          {past ? 'Passed on ' : 'Counting down to '}
+          <b>{formatDate(t)}</b>
+        </p>
+      )}
     </>
   )
 }

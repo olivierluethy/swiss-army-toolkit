@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Plus, X, Radio } from 'lucide-react'
 import { useLocalStorage } from '../hooks/useLocalStorage.js'
 import { Field } from '../components/ui.jsx'
+import { formatDate, formatWeekday } from '../utils/formatDate.js'
 
 const ZONES = [
   { tz: 'Pacific/Honolulu', city: 'Honolulu' },
@@ -103,7 +104,9 @@ export default function WorldClock() {
             <div className="wc__row" key={tz}>
               <div className="wc__city">
                 <b>{CITY[tz] || tz}</b>
-                <span className="muted">{p.weekday}, {p.month} {p.day} · {offLabel}</span>
+                <span className="muted">
+                  {formatWeekday(baseDate, { timeZone: tz })}, {formatDate(baseDate, { timeZone: tz })} · {offLabel}
+                </span>
               </div>
               <div className="wc__time stat">{p.hour}:{p.minute}</div>
               <button className="wc__x" onClick={() => remove(tz)} aria-label={`Remove ${CITY[tz]}`}><X size={15} /></button>
