@@ -13,7 +13,7 @@ network calls.
 | | Tool | What it does |
 |---|---|---|
 | 🧮 | **Calculator** | Arithmetic with `%`, `±`, and memory (MC/MR/M+/M−). Keyboard-friendly. |
-| 💰 | **Currency** | Convert between 16 currencies using a bundled, editable rate table. |
+| 💰 | **Currency** | Convert 16 currencies — fetch live rates from free public APIs, edit them by hand, or fall back to the bundled table offline. |
 | 📏 | **Units** | Length, weight, volume, speed and temperature. |
 | ⏱️ | **Timer & Stopwatch** | Stopwatch with laps + countdown timer with a beep. |
 | 🌍 | **World Clock** | Live times across cities, plus a timezone converter. |
@@ -60,13 +60,25 @@ browser. No server needed.
 npm run dev
 ```
 
-## Offline currency rates
+## Currency rates
 
-The exchange rates are **static**, bundled in
-[`src/data/currency.js`](src/data/currency.js) and clearly labelled with their
-date. They are **not live**. You can override any rate inside the tool
-(**Edit rates**) and your changes are saved locally; **Reset** restores the
-bundled values. To refresh the defaults, edit the constants in that file.
+The app ships with a **static, bundled** rate table in
+[`src/data/currency.js`](src/data/currency.js) so it always works offline. On
+top of that:
+
+- **Get latest rates** (and a best-effort auto-fetch when you first open the
+  tool) pulls current rates from free, no-key, CORS-enabled public APIs, tried
+  in order: **Frankfurter → open.er-api.com → currency-api (jsDelivr)**. The
+  last successful result is cached locally with its timestamp and source
+  (`Updated 18th of July 2026, 14:32 · Frankfurter`).
+- **Edit rates** lets you override any value by hand; **Reset** restores the
+  bundled table.
+- If every fetch fails (offline, or `file://` blocked the request), it silently
+  keeps the last cached rates — or the bundled table — and shows a small
+  *offline — using saved rates* note. The rest of the app is never blocked.
+
+The live fetch is an online-only enhancement: the build still opens and runs
+straight from `dist/index.html` over `file://` with no server.
 
 ## Project structure
 
@@ -83,5 +95,9 @@ src/
     currency.js           # static exchange-rate table
   hooks/
     useLocalStorage.js
+    useMediaQuery.js      # sizes the fanned blade rows responsively
+  utils/
+    formatDate.js         # shared "15th of January 2026" formatter
+    fetchRates.js         # live FX rates with a 3-endpoint fallback chain
   tools/                  # one file per tool
 ```
