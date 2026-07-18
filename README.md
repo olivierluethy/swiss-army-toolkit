@@ -1,9 +1,11 @@
 # Swiss Army Toolkit 🔴✚
 
-A modern, animated single-page web app themed as a **Swiss Army knife**. The
-handle holds 15 blades — each one a genuinely useful everyday tool that
-**folds out** with a springy Framer Motion animation. Open as many as you like;
-they all keep working side by side.
+A modern, animated single-page web app themed as a **Swiss Army knife**. A tall
+red handle holds 15 blades — 8 folding out of the left side, 7 out of the right,
+like a real one. Each blade is a genuinely useful everyday tool that **folds
+out** with a springy Framer Motion animation, its panel opening on that blade's
+own side of the handle. Open as many as you like; both sides stay usable at
+once. On phones the two columns collapse into a single full-width stack.
 
 Built to run **fully offline**, straight from the file system — no server, no
 network calls.
@@ -92,12 +94,12 @@ straight from `dist/index.html` over `file://` with no server.
 src/
   App.jsx                 # app state: which blades are open
   components/
-    Knife.jsx             # the red handle + blade tray
-    BladeButton.jsx       # one folded blade
-    ToolPanel.jsx         # the fold-out card wrapper (the signature animation)
+    Knife.jsx             # the vertical handle + left/right blade rails
+    BladeButton.jsx       # one side-mounted blade that swings out
+    ToolPanel.jsx         # the fold-out card, opening on its blade's side
     ui.jsx                # shared inputs, segmented control, copy button
   data/
-    tools.js              # the blade registry (icon, accent, component)
+    tools.js              # the blade registry (icon, accent, component) + left/right split
     currency.js           # static exchange-rate table
   hooks/
     useLocalStorage.js
