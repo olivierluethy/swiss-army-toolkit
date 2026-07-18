@@ -1,0 +1,144 @@
+:root {
+  /* Swiss Army palette */
+  --red: #d4102b;
+  --red-bright: #e8112d;
+  --red-dark: #9c0a1f;
+  --red-deep: #7a0817;
+
+  /* Brushed steel */
+  --steel-1: #f4f6f8;
+  --steel-2: #d7dde3;
+  --steel-3: #aab4bd;
+  --steel-4: #7f8b95;
+  --steel-edge: #ffffff;
+
+  /* Workspace */
+  --bg-0: #0e1013;
+  --bg-1: #14171c;
+  --bg-2: #1b1f26;
+  --surface: #1e232b;
+  --surface-2: #262c35;
+  --surface-3: #2f3742;
+  --border: #333b46;
+  --border-soft: #2a313b;
+
+  --text: #eef2f6;
+  --text-dim: #a7b0bb;
+  --text-faint: #6b7684;
+
+  --accent: #4ea1ff;
+  --good: #3ecf8e;
+  --warn: #ffb020;
+  --bad: #ff5a5f;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-3: 0 20px 50px rgba(0, 0, 0, 0.5);
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  --mono: "SF Mono", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo,
+    Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-0);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--red);
+  color: #fff;
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--surface-3);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--steel-4);
+  background-clip: padding-box;
+}
+
+/* ---------- App shell ---------- */
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: radial-gradient(
+      1200px 600px at 50% -10%,
+      #1a1f27 0%,
+      var(--bg-0) 60%
+    ),
+    var(--bg-0);
+  display: flex;
+  flex-direction: column;
+}
+
+.app__inner {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px 16px 80px;
+  flex: 1;
+}
+
+.app__footer {
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 12px;
+  padding: 24px 16px calc(24px + env(safe-area-inset-bottom));
+  line-height: 1.7;
+}
+.app__footer strong {
+  color: var(--text-dim);
+  font-weight: 600;
+}
