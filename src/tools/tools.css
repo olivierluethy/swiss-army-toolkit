@@ -97,6 +97,12 @@ input[type='range'].pw__range {
 .cur__sym { color: var(--text-dim); margin-right: 3px; }
 .cur__code { font-size: 0.62em; color: var(--text-dim); font-weight: 600; }
 .cur__rate { font-size: 13px; color: var(--text-faint); margin-top: 4px; }
+.cur__source { display: flex; flex-direction: column; gap: 3px; }
+.cur__offline { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: var(--warn); }
+.cur__actions { display: flex; gap: 8px; }
+.cur__actions .btn { flex: 1; }
+.spin { animation: spin 0.9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .cur__editor { border-top: 1px dashed var(--border); padding-top: 12px; display: flex; flex-direction: column; gap: 10px; }
 .cur__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px; }
 .cur__rate-row { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-dim); }
