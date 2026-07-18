@@ -1,0 +1,535 @@
+/* ============================================================
+   KNIFE — the handle and the fold-out blade selector
+   ============================================================ */
+.knife {
+  position: relative;
+  margin: 8px auto 30px;
+  max-width: 940px;
+}
+
+/* The red handle body */
+.handle {
+  position: relative;
+  border-radius: 26px;
+  padding: 20px 22px 22px;
+  background: linear-gradient(
+    180deg,
+    var(--red-bright) 0%,
+    var(--red) 42%,
+    var(--red-dark) 100%
+  );
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.15),
+    var(--shadow-3);
+  overflow: hidden;
+}
+/* subtle glossy sheen sweeping across the handle */
+.handle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0) 70%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  pointer-events: none;
+}
+/* the classic side rivets */
+.handle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: radial-gradient(circle at 35% 30%, #fff 0%, #cdd3d8 40%, #7c848b 100%);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25),
+    0 -170px 0 rgba(255, 255, 255, 0) ,
+    14px 0 0 -1px transparent;
+}
+
+.handle__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+.emblem {
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  flex: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 3px 8px rgba(0, 0, 0, 0.25);
+}
+.emblem svg {
+  color: var(--red);
+}
+.handle__title {
+  color: #fff;
+  line-height: 1.05;
+}
+.handle__title b {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.handle__title span {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+}
+.handle__count {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.18);
+  padding: 6px 11px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Blade tray */
+.blades {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+}
+
+/* ---------- A single folded blade / tool tab ---------- */
+.blade {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 8px 11px;
+  border-radius: 13px;
+  background: linear-gradient(
+    180deg,
+    var(--steel-1) 0%,
+    var(--steel-2) 55%,
+    var(--steel-3) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 var(--steel-edge),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.18),
+    0 3px 6px rgba(0, 0, 0, 0.28);
+  color: #2b333c;
+  transition:
+    transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.16s ease,
+    filter 0.16s ease;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+.blade__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+.blade__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center;
+  line-height: 1.15;
+  color: #333c45;
+}
+.blade:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 1px 0 var(--steel-edge),
+    0 8px 16px rgba(0, 0, 0, 0.34);
+  filter: brightness(1.03);
+}
+.blade:active {
+  transform: translateY(-1px) scale(0.98);
+}
+.blade:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 2px;
+}
+/* open state — blade is "pulled out", glowing accent nick */
+.blade.is-open {
+  background: linear-gradient(180deg, #ffffff 0%, #eef1f4 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--blade-accent, var(--accent)),
+    0 6px 16px rgba(0, 0, 0, 0.3);
+}
+.blade.is-open .blade__icon {
+  background: var(--blade-accent, var(--accent));
+  color: #fff;
+}
+.blade__nick {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blade-accent, var(--accent));
+  box-shadow: 0 0 8px var(--blade-accent, var(--accent));
+}
+
+/* ============================================================
+   WORKSPACE — where opened tools live
+   ============================================================ */
+.workspace {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-faint);
+  padding: 40px 20px 10px;
+}
+.empty__ring {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  color: var(--red);
+  background: rgba(212, 16, 43, 0.08);
+  border: 1px dashed rgba(212, 16, 43, 0.4);
+}
+.empty h2 {
+  color: var(--text);
+  font-size: 18px;
+  margin: 0 0 6px;
+}
+.empty p {
+  margin: 0 auto;
+  max-width: 340px;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+/* ---------- Tool panel (fold-out card) ---------- */
+.panel {
+  background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  /* hinge lives at the top-left corner, like a blade pivoting off the handle */
+  transform-origin: top left;
+}
+.panel__head {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 13px 13px 15px;
+  border-bottom: 1px solid var(--border-soft);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--panel-accent, var(--accent)) 16%, var(--surface)) 0%,
+    var(--surface) 100%
+  );
+}
+.panel__badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: #fff;
+  background: var(--panel-accent, var(--accent));
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--panel-accent, var(--accent)) 45%, transparent);
+}
+.panel__title {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.panel__close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+  flex: none;
+}
+.panel__close:hover {
+  background: var(--surface-3);
+  color: var(--text);
+  transform: rotate(90deg);
+}
+.panel__body {
+  padding: 16px 15px 17px;
+}
+
+/* ============================================================
+   Shared tool UI primitives
+   ============================================================ */
+.tool {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.tool__note {
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+.fld {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.fld__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+}
+.fld__hint {
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.inp,
+textarea.inp,
+select.inp {
+  width: 100%;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 12px;
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.inp:focus,
+textarea.inp:focus,
+select.inp:focus {
+  border-color: var(--panel-accent, var(--accent));
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--panel-accent, var(--accent)) 25%, transparent);
+}
+.inp::placeholder {
+  color: var(--text-faint);
+}
+textarea.inp {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.5;
+}
+select.inp {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a7b0bb' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  padding-right: 34px;
+}
+.inp--mono {
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: transform 0.12s, background 0.15s, border-color 0.15s, filter 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover {
+  background: var(--surface-3);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn--primary {
+  background: var(--panel-accent, var(--accent));
+  border-color: transparent;
+  color: #fff;
+}
+.btn--primary:hover {
+  filter: brightness(1.08);
+  background: var(--panel-accent, var(--accent));
+}
+.btn--red {
+  background: var(--red);
+  border-color: transparent;
+  color: #fff;
+}
+.btn--red:hover {
+  background: var(--red-bright);
+}
+.btn--ghost {
+  background: transparent;
+}
+.btn--block {
+  width: 100%;
+}
+.btn--icon {
+  padding: 10px;
+}
+
+/* Segmented control */
+.seg {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 100%;
+}
+.seg__btn {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.seg__btn:hover {
+  color: var(--text);
+}
+.seg__btn.is-active {
+  background: var(--panel-accent, var(--accent));
+  color: #fff;
+}
+.seg--sm .seg__btn {
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+/* Copy button */
+.copybtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.copybtn:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.copybtn.is-copied {
+  color: var(--good);
+  border-color: color-mix(in srgb, var(--good) 45%, var(--border));
+}
+.copybtn--sm {
+  padding: 7px;
+}
+
+/* Readout */
+.readout {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 15px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.readout--mono {
+  font-family: var(--mono);
+  letter-spacing: -0.01em;
+}
+
+/* small helpers */
+.muted {
+  color: var(--text-faint);
+}
+.hstack {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.spread {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.wrap {
+  flex-wrap: wrap;
+}
+.stat {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
