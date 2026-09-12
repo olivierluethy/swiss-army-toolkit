@@ -1,5 +1,10 @@
 # Swiss Army Toolkit 🔴✚
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Framer Motion](https://img.shields.io/badge/Framer%20Motion-0055FF?logo=framer&logoColor=white)](https://www.framer.com/motion/)
+
 A modern, animated single-page web app themed as a **Swiss Army knife**. A tall
 red handle holds 15 blades — 8 folding out of the left side, 7 out of the right,
 like a real one. Each blade is a genuinely useful everyday tool that **folds
@@ -109,3 +114,12 @@ src/
     fetchRates.js         # live FX rates with a 3-endpoint fallback chain
   tools/                  # one file per tool
 ```
+
+## License
+
+Released under the [MIT License](LICENSE) © 2026 Olivier Lüthy. You're free to use, modify and distribute this
+software, including commercially, as long as the copyright notice and license are included.
+
+## Author
+
+Built by **Olivier Lüthy** — [GitHub](https://github.com/olivierluethy).
